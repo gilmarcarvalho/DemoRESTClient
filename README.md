@@ -1,20 +1,10 @@
 # DemoRESTClient
-<html xmlns:v="urn:schemas-microsoft-com:vml"
-xmlns:o="urn:schemas-microsoft-com:office:office"
-xmlns:w="urn:schemas-microsoft-com:office:word"
-xmlns:m="http://schemas.microsoft.com/office/2004/12/omml"
-xmlns="http://www.w3.org/TR/REC-html40">
 
-<head>
-<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
-<meta name=ProgId content=Word.Document>
-<meta name=Generator content="Microsoft Word 15">
-<meta name=Originator content="Microsoft Word 15">
-<img border=0 width=567 height=545
-src="/image002.jpg" </span></p>
 
+<div>
+<h3> Simples demonstração de Consumo de webservice REST do site https://jsonplaceholder.typicode.com/ </h3>
+
+<img src="/image002.jpg" border=1 width=567 height=545>
+
+<strong>Gilmar Carvalho</strong>
 </div>
-
-</body>
-
-</html>
