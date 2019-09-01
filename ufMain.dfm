@@ -2,8 +2,8 @@ object fMain: TfMain
   Left = 0
   Top = 0
   Caption = 'Main'
-  ClientHeight = 582
-  ClientWidth = 638
+  ClientHeight = 555
+  ClientWidth = 713
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -25,7 +25,7 @@ object fMain: TfMain
   object Label4: TLabel
     Left = 0
     Top = 0
-    Width = 638
+    Width = 713
     Height = 25
     Align = alTop
     Alignment = taCenter
@@ -43,119 +43,233 @@ object fMain: TfMain
     Layout = tlCenter
     ExplicitWidth = 670
   end
-  object Label3: TLabel
-    Left = 8
-    Top = 127
-    Width = 30
-    Height = 13
-    Caption = 'Posts:'
-  end
-  object Label5: TLabel
-    Left = 8
-    Top = 346
-    Width = 54
-    Height = 13
-    Caption = 'Comments:'
-  end
-  object Button1: TButton
-    Left = 8
-    Top = 90
-    Width = 75
-    Height = 25
-    Caption = 'Processar'
-    TabOrder = 0
-    OnClick = Button1Click
-  end
   object Edit1: TEdit
     Left = 108
     Top = 37
     Width = 511
     Height = 21
     ReadOnly = True
-    TabOrder = 1
+    TabOrder = 0
     Text = 'https://jsonplaceholder.typicode.com/'
   end
-  object DBGrid1: TDBGrid
+  object PageControl1: TPageControl
     AlignWithMargins = True
-    Left = 8
-    Top = 146
-    Width = 611
-    Height = 189
-    DataSource = DataSource1
-    TabOrder = 2
-    TitleFont.Charset = DEFAULT_CHARSET
-    TitleFont.Color = clWindowText
-    TitleFont.Height = -11
-    TitleFont.Name = 'Tahoma'
-    TitleFont.Style = []
-    Columns = <
-      item
-        Expanded = False
-        FieldName = 'userId'
-        Width = 50
-        Visible = True
+    Left = 3
+    Top = 89
+    Width = 707
+    Height = 463
+    ActivePage = TabSheet2
+    Align = alBottom
+    TabOrder = 1
+    ExplicitTop = 140
+    object TabSheet1: TTabSheet
+      Caption = 'Postagens'
+      ExplicitHeight = 399
+      object Label3: TLabel
+        Left = 8
+        Top = 39
+        Width = 54
+        Height = 13
+        Caption = 'Postagens:'
       end
-      item
-        Expanded = False
-        FieldName = 'id'
-        Width = 50
-        Visible = True
+      object Label5: TLabel
+        Left = 8
+        Top = 253
+        Width = 129
+        Height = 13
+        Caption = 'Coment'#225'rios da postagem:'
       end
-      item
-        Expanded = False
-        FieldName = 'title'
-        Width = 200
-        Visible = True
+      object DBGrid1: TDBGrid
+        AlignWithMargins = True
+        Left = 8
+        Top = 58
+        Width = 611
+        Height = 183
+        DataSource = DataSource1
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'userId'
+            Width = 50
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'id'
+            Width = 50
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'title'
+            Width = 200
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'body'
+            Width = 300
+            Visible = True
+          end>
       end
-      item
-        Expanded = False
-        FieldName = 'body'
-        Width = 300
-        Visible = True
-      end>
-  end
-  object DBGrid2: TDBGrid
-    AlignWithMargins = True
-    Left = 8
-    Top = 365
-    Width = 611
-    Height = 189
-    DataSource = DataSource2
-    TabOrder = 3
-    TitleFont.Charset = DEFAULT_CHARSET
-    TitleFont.Color = clWindowText
-    TitleFont.Height = -11
-    TitleFont.Name = 'Tahoma'
-    TitleFont.Style = []
-    Columns = <
-      item
-        Expanded = False
-        FieldName = 'postId'
-        Visible = True
+      object DBGrid2: TDBGrid
+        AlignWithMargins = True
+        Left = 8
+        Top = 272
+        Width = 611
+        Height = 149
+        DataSource = DataSource2
+        TabOrder = 1
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'postId'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'id'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'name'
+            Width = 200
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'email'
+            Width = 200
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'body'
+            Width = 300
+            Visible = True
+          end>
       end
-      item
-        Expanded = False
-        FieldName = 'id'
-        Visible = True
+      object Button1: TButton
+        Left = 8
+        Top = 8
+        Width = 75
+        Height = 25
+        Caption = 'Processar'
+        TabOrder = 2
+        OnClick = Button1Click
       end
-      item
-        Expanded = False
-        FieldName = 'name'
-        Width = 200
-        Visible = True
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Fotos'
+      ImageIndex = 1
+      ExplicitHeight = 399
+      object DBGrid3: TDBGrid
+        AlignWithMargins = True
+        Left = 3
+        Top = 44
+        Width = 502
+        Height = 388
+        Align = alClient
+        DataSource = DataSource3
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'albumId'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'id'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'title'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'url'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'thumbnailUrl'
+            Visible = True
+          end>
       end
-      item
-        Expanded = False
-        FieldName = 'email'
-        Width = 200
-        Visible = True
+      object Panel1: TPanel
+        Left = 0
+        Top = 0
+        Width = 699
+        Height = 41
+        Align = alTop
+        BevelOuter = bvNone
+        TabOrder = 1
+        ExplicitLeft = 192
+        ExplicitTop = 172
+        ExplicitWidth = 185
+        object Button2: TButton
+          Left = 3
+          Top = 8
+          Width = 75
+          Height = 25
+          Caption = 'Processar'
+          TabOrder = 0
+          OnClick = Button2Click
+        end
       end
-      item
-        Expanded = False
-        FieldName = 'body'
-        Width = 300
-        Visible = True
-      end>
+      object Panel2: TPanel
+        AlignWithMargins = True
+        Left = 511
+        Top = 44
+        Width = 185
+        Height = 388
+        Align = alRight
+        BevelOuter = bvNone
+        TabOrder = 2
+        ExplicitLeft = 436
+        ExplicitTop = 256
+        ExplicitHeight = 41
+        object Image1: TImage
+          Left = 0
+          Top = 20
+          Width = 185
+          Height = 165
+          Align = alTop
+          Center = True
+          Stretch = True
+          ExplicitTop = 0
+        end
+        object Label2: TLabel
+          Left = 0
+          Top = 0
+          Width = 185
+          Height = 20
+          Align = alTop
+          AutoSize = False
+          Caption = 'Foto:'
+        end
+      end
+    end
   end
   object RESTClient1: TRESTClient
     Accept = 'application/json, text/plain; q=0.9, text/html;q=0.8,'
@@ -250,5 +364,60 @@ object fMain: TfMain
     DataSet = FDMemTable2
     Left = 524
     Top = 292
+  end
+  object FDMemTable3: TFDMemTable
+    AfterScroll = FDMemTable3AfterScroll
+    FieldDefs = <>
+    IndexDefs = <>
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    StoreDefs = True
+    Left = 588
+    Top = 228
+    object FDMemTable3albumId: TIntegerField
+      FieldName = 'albumId'
+    end
+    object FDMemTable3id: TIntegerField
+      FieldName = 'id'
+    end
+    object FDMemTable3title: TStringField
+      FieldName = 'title'
+      Size = 255
+    end
+    object FDMemTable3url: TStringField
+      FieldName = 'url'
+      Size = 255
+    end
+    object FDMemTable3thumbnailUrl: TStringField
+      FieldName = 'thumbnailUrl'
+      Size = 255
+    end
+  end
+  object DataSource3: TDataSource
+    DataSet = FDMemTable3
+    Left = 588
+    Top = 288
+  end
+  object IdHTTP1: TIdHTTP
+    AllowCookies = True
+    ProxyParams.BasicAuthentication = False
+    ProxyParams.ProxyPort = 0
+    Request.ContentLength = -1
+    Request.ContentRangeEnd = -1
+    Request.ContentRangeStart = -1
+    Request.ContentRangeInstanceLength = -1
+    Request.Accept = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+    Request.BasicAuthentication = False
+    Request.UserAgent = 'Mozilla/3.0 (compatible; Indy Library)'
+    Request.Ranges.Units = 'bytes'
+    Request.Ranges = <>
+    HTTPOptions = [hoForceEncodeParams]
+    Left = 644
+    Top = 48
   end
 end

@@ -5,8 +5,8 @@
     <Transaction>2018/09/05 11:10:10.000.747,=C:\Users\Gilmar\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2018/09/05 18:36:38.000.045,=C:\Users\Gilmar\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>2019/07/08 11:25:30.000.244,=C:\Users\Gilmar\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>2019/07/08 11:26:17.000.864,C:\Users\Gilmar\Documents\Embarcadero\Studio\Projects\Unit1.dfm=C:\Users\Gilmar\Desktop\Curso Mourao\Piloto\Client\ufMain.dfm</Transaction>
-    <Transaction>2019/07/08 11:26:17.000.864,C:\Users\Gilmar\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\Users\Gilmar\Desktop\Curso Mourao\Piloto\Client\ufMain.pas</Transaction>
-    <Transaction>2019/07/08 11:26:23.000.739,C:\Users\Gilmar\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\Users\Gilmar\Desktop\Curso Mourao\Piloto\Client\Client.dproj</Transaction>
+    <Transaction>2019/07/08 11:26:17.000.864,C:\Users\Gilmar\Desktop\Curso Mourao\Piloto\Client\ufMain.pas=C:\Users\Gilmar\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2019/07/08 11:26:17.000.864,C:\Users\Gilmar\Desktop\Curso Mourao\Piloto\Client\ufMain.dfm=C:\Users\Gilmar\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2019/07/08 11:26:23.000.739,C:\Users\Gilmar\Desktop\Curso Mourao\Piloto\Client\Client.dproj=C:\Users\Gilmar\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
   </Transactions>
 </BorlandProject>
