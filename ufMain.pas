@@ -1,24 +1,24 @@
 unit ufMain;
 
+{*******************************************************************************
+    Project link   : https://github.com/gilmarcarvalho/DemoRESTClient
+    Created In     : 2019-09-02 14:38:10
+    Created By     : Gilmar Alves de Carvalho - (linkedin.com/in/gilmar-carvalho)
+*******************************************************************************}
+
+
 interface
 
-uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, REST.Types, Data.DB, FireDAC.Stan.Intf,
-  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
-  FireDAC.Phys.Intf, FireDAC.DApt.Intf, REST.Response.Adapter,
-  FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.Grids, Vcl.DBGrids,
-  REST.Client, Data.Bind.Components, Data.Bind.ObjectScope, Vcl.StdCtrls,
-  rest.json,system.json,  Vcl.ExtCtrls,System.JSON.Readers,   System.JSON.Types,
-  System.Generics.Collections,  Vcl.ValEdit,TypInfo, Vcl.ComCtrls,
-  Vcl.Imaging.pngimage,IdHTTP, IdBaseComponent, IdComponent, IdTCPConnection,
-  IdTCPClient;
+uses Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+System.Classes, Vcl.Graphics,  Vcl.Controls, Vcl.Forms,  Data.DB,
+FireDAC.Stan.Intf,   FireDAC.Stan.Option, FireDAC.Stan.Param,
+FireDAC.Stan.Error, FireDAC.DatS,  FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+ FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.Grids,
+ Vcl.DBGrids,  Data.Bind.Components, Data.Bind.ObjectScope,
+ Vcl.StdCtrls,  Vcl.ExtCtrls,  Vcl.ValEdit, Vcl.ComCtrls,WSClient;
 
 type
   TfMain = class(TForm)
-    RESTClient1: TRESTClient;
-    RESTRequest1: TRESTRequest;
-    RESTResponse1: TRESTResponse;
     FDMemTable1: TFDMemTable;
     DataSource1: TDataSource;
     Edit1: TEdit;
@@ -55,21 +55,17 @@ type
     Button2: TButton;
     Panel2: TPanel;
     Image1: TImage;
-    IdHTTP1: TIdHTTP;
     Label2: TLabel;
-    procedure Button1Click(Sender: TObject);
     procedure FDMemTable1AfterScroll(DataSet: TDataSet);
-    procedure Button2Click(Sender: TObject);
     procedure FDMemTable3AfterScroll(DataSet: TDataSet);
+    procedure FormShow(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
-    Opening:boolean;
-    const URLBase='https://jsonplaceholder.typicode.com';
-    procedure loadPosts(aDataset:TDataset);
-    procedure loadComments(aDataset:TDataset);
-    procedure loadPhotos(aDataset:TDataset);
-    procedure GetImageByUrl(URL: string; APicture:TPicture);
-    function getJson(aURL:string):string;
+    baseURL:string;
+    WSClient:TWSClient;
 
   public
 
@@ -83,143 +79,39 @@ implementation
 
 {$R *.dfm}
 
-procedure tfMain.GetImageByUrl(URL: string; APicture:TPicture);
-var
-  Png: TPNGImage;
-  Strm: TMemoryStream;
-  Picture:TPicture;
-begin
-  if Opening then
-    exit;
-  Picture:=tpicture.Create;
-  Screen.Cursor := crHourGlass;
-  Png := TPNGImage.Create;
-  Strm := TMemoryStream.Create;
-
-  try
-    IdHTTP1.Get(URL, Strm);
-    if (Strm.Size > 0) then
-    begin
-      Strm.Position := 0;
-      Png.LoadFromStream(Strm);
-      APicture.Assign(PNG);
-    end;
-  finally
-    Strm.Free;
-    Png.Free;
-    Picture.Free;
-    Screen.Cursor := crDefault;
-  end;
-end;
-
-procedure TfMain.FDMemTable1AfterScroll(DataSet: TDataSet);
-begin
-  loadComments(fdmemtable2);
-end;
-
-procedure TfMain.FDMemTable3AfterScroll(DataSet: TDataSet);
-begin
-  GetImageByUrl(DataSet.FieldByName('thumbnailUrl').AsString,Image1.Picture);
-end;
-
-function tfmain.getJson(aURL:string):string;
-begin
-  screen.Cursor:=crHourglass;
-  RESTClient1.BaseURL:=aURL;
-  RESTRequest1.Execute;
-  result:= RESTResponse1.Content;
-  screen.Cursor:=crDefault;
-end;
-
-procedure tfmain.LoadPosts(aDataset: TDataSet);
-var JO:TJSONObject;JA:TJSONArray;JP:TJSONPair;
-  I: Integer;
-  j: Integer;
-  aJSON: string;
-begin
-  Opening:=true;
-  aJSON:=getJson(URLBase+'/posts');
-  aDataset.Active:=false;
-  aDataset.Active:=true;
-  JA:=TJSONObject.ParseJSONValue(aJSON) as TJSONArray;
-  for I := 0 to JA.Count-1 do
-  begin
-    JO:=(ja.Items[I] as TJSONObject);
-    aDataset.Append;
-    for j := 0 to jo.Count-1 do
-    begin
-      JP:=JO.Pairs[j];
-      aDataset.FieldByName(jp.JsonString.Value).Value:=jp.JsonValue.Value;
-    end;
-    aDataset.Post;
-  end;
-  aDataset.Open;
-  ja.Free;
-  Opening:=false;
-end;
-
-procedure tfmain.LoadComments(aDataset: TDataSet);
-var JO:TJSONObject;JA:TJSONArray;JP:TJSONPair;
-  I: Integer;
-  j: Integer;
-  aJSON: string;
-begin
-  if Opening then
-    exit;
-  aJSON:=getJson(URLBase+'/comments?postId='+fdmemtable1.FieldByName('id').AsString);
-  aDataset.Active:=false;
-  aDataset.Active:=true;
-  JA:=TJSONObject.ParseJSONValue(aJSON) as TJSONArray;
-  for I := 0 to JA.Count-1 do
-  begin
-    JO:=(ja.Items[I] as TJSONObject);
-    aDataset.Append;
-    for j := 0 to jo.Count-1 do
-    begin
-      JP:=JO.Pairs[j];
-      aDataset.FieldByName(jp.JsonString.Value).Value:=jp.JsonValue.Value;
-    end;
-    aDataset.Post;
-  end;
-  aDataset.Open;
-  ja.Free;
-end;
-
-procedure tfmain.LoadPhotos(aDataset: TDataSet);
-var JO:TJSONObject;JA:TJSONArray;JP:TJSONPair;
-  I: Integer;
-  j: Integer;
-  aJSON: string;
-begin
-  Opening:=true;
-  aJSON:=getJson(URLBase+'/photos?albumId=1');
-  aDataset.Active:=false;
-  aDataset.Active:=true;
-  JA:=TJSONObject.ParseJSONValue(aJSON) as TJSONArray;
-  for I := 0 to JA.Count-1 do
-  begin
-    JO:=(ja.Items[I] as TJSONObject);
-    aDataset.Append;
-    for j := 0 to jo.Count-1 do
-    begin
-      JP:=JO.pairs[j];
-      aDataset.FieldByName(jp.JsonString.Value).Value:=jp.JsonValue.Value;
-    end;
-    aDataset.Post;
-  end;
-  aDataset.Open;
-  ja.Free;
-  Opening:=false;
-end;
 
 procedure TfMain.Button1Click(Sender: TObject);
 begin
-  LoadPosts(FDMemTable1);
+  wsclient.JsonToDataset(baseURL+'/posts',fdmemtable1);
 end;
 
 procedure TfMain.Button2Click(Sender: TObject);
 begin
-  LoadPhotos(FDMemTable3);
+  wsclient.JsonToDataset(baseURL+'/photos/?albumId=10',fdmemtable3);
 end;
+
+procedure TfMain.FDMemTable1AfterScroll(DataSet: TDataSet);
+begin
+  wsclient.JsonToDataset(baseURL+'/comments/?postId='+dataset.FieldByName('id').AsString,FDMemTable2);
+end;
+procedure TfMain.FDMemTable3AfterScroll(DataSet: TDataSet);
+var img:tpicture;
+begin
+  img:=wsclient.GetImageByUrl(fdmemtable3.FieldByName('thumbnailUrl').AsString);
+  image1.Picture.Assign(img);
+  img.Free;
+end;
+
+procedure TfMain.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  wsclient.Free;
+end;
+
+procedure TfMain.FormShow(Sender: TObject);
+begin
+  WSClient:=tWSClient.create;
+  baseurl:='https://jsonplaceholder.typicode.com';
+end;
+
 
 end.

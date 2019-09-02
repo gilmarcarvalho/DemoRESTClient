@@ -11,6 +11,8 @@ object fMain: TfMain
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnClose = FormClose
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -58,13 +60,11 @@ object fMain: TfMain
     Top = 89
     Width = 707
     Height = 463
-    ActivePage = TabSheet2
+    ActivePage = TabSheet1
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 140
     object TabSheet1: TTabSheet
       Caption = 'Postagens'
-      ExplicitHeight = 399
       object Label3: TLabel
         Left = 8
         Top = 39
@@ -174,7 +174,6 @@ object fMain: TfMain
     object TabSheet2: TTabSheet
       Caption = 'Fotos'
       ImageIndex = 1
-      ExplicitHeight = 399
       object DBGrid3: TDBGrid
         AlignWithMargins = True
         Left = 3
@@ -224,9 +223,6 @@ object fMain: TfMain
         Align = alTop
         BevelOuter = bvNone
         TabOrder = 1
-        ExplicitLeft = 192
-        ExplicitTop = 172
-        ExplicitWidth = 185
         object Button2: TButton
           Left = 3
           Top = 8
@@ -246,9 +242,6 @@ object fMain: TfMain
         Align = alRight
         BevelOuter = bvNone
         TabOrder = 2
-        ExplicitLeft = 436
-        ExplicitTop = 256
-        ExplicitHeight = 41
         object Image1: TImage
           Left = 0
           Top = 20
@@ -270,29 +263,6 @@ object fMain: TfMain
         end
       end
     end
-  end
-  object RESTClient1: TRESTClient
-    Accept = 'application/json, text/plain; q=0.9, text/html;q=0.8,'
-    AcceptCharset = 'utf-8, *;q=0.8'
-    BaseURL = 'https://jsonplaceholder.typicode.com/posts/1/comments'
-    Params = <>
-    RaiseExceptionOn500 = False
-    Left = 412
-    Top = 168
-  end
-  object RESTRequest1: TRESTRequest
-    Client = RESTClient1
-    Params = <>
-    Response = RESTResponse1
-    SynchronizedEvents = False
-    Left = 484
-    Top = 172
-  end
-  object RESTResponse1: TRESTResponse
-    ContentType = 'application/json'
-    RootElement = 'Result[0]'
-    Left = 556
-    Top = 172
   end
   object FDMemTable1: TFDMemTable
     AfterScroll = FDMemTable1AfterScroll
@@ -402,22 +372,5 @@ object fMain: TfMain
     DataSet = FDMemTable3
     Left = 588
     Top = 288
-  end
-  object IdHTTP1: TIdHTTP
-    AllowCookies = True
-    ProxyParams.BasicAuthentication = False
-    ProxyParams.ProxyPort = 0
-    Request.ContentLength = -1
-    Request.ContentRangeEnd = -1
-    Request.ContentRangeStart = -1
-    Request.ContentRangeInstanceLength = -1
-    Request.Accept = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
-    Request.BasicAuthentication = False
-    Request.UserAgent = 'Mozilla/3.0 (compatible; Indy Library)'
-    Request.Ranges.Units = 'bytes'
-    Request.Ranges = <>
-    HTTPOptions = [hoForceEncodeParams]
-    Left = 644
-    Top = 48
   end
 end
