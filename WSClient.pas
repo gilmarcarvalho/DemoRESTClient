@@ -13,54 +13,79 @@ vcl.controls, Generics.Collections, Rest.Json, System.JSON,Data.DB,REST.Client,
 SysUtils,vcl.Graphics,system.classes,IdHTTP, IdBaseComponent, IdComponent,
 IdTCPConnection,  IdTCPClient, Vcl.Imaging.pngimage,Vcl.Imaging.jpeg;
 
+type
+TJsonResult = class
+  private
+    _StatusCode:integer;
+    _Content:string;
+    _RESTClient: TRESTClient;
+    _RESTRequest: TRESTRequest;
+    _RESTResponse: TRESTResponse;
+  public
+    property StatusCode:integer read _StatusCode;
+    property Content:String read _Content;
+    procedure Execute(aURL:String);
+    constructor Create;
+    destructor Destroy;override;
+end;
 
 type
 
 TWSClient = class
-private
-  _processing:boolean;
-  _idHTTP:tIdHTTP;
-  _RESTClient: TRESTClient;
-  _RESTRequest: TRESTRequest;
-  _RESTResponse: TRESTResponse;
-  function getJson(aURL:String):string;
-public
-  Procedure JsonToDataset(URL:string;toDataset:TDataset);
-  function GetImageByUrl(URL: string ):TPicture;
-  property Processing:boolean read _Processing;
-  Constructor Create;
-  destructor Destroy; override;
+  private
+    _idHTTP:tIdHTTP;
+    _JsonResult: TJSONResult;
+  public
+    Procedure JsonToDataset(URL:string;toDataset:TDataset);
+    function GetImageByUrl(URL: string ):TPicture;
+    Constructor Create;
+    destructor Destroy; override;
 end;
 
 implementation
 
+{TJsonResult}
+
+Constructor TJsonResult.Create;
+begin
+  _RESTClient:=TRESTClient.Create('');
+  _RestRequest:=TRestRequest.Create(nil);
+  _RESTResponse:=TRESTResponse.Create(nil);
+  _RestRequest.Client:=_RESTClient;
+  _RestRequest.Response:=_RESTResponse;
+  _RESTClient.Accept:='application/json';
+  _RestClient.AcceptCharset:='utf-8, *;q=0.8';
+end;
+
+Destructor TJsonResult.destroy;
+begin
+  _RESTClient.Free;
+  _RestRequest.Free;
+  _RESTResponse.Free;
+end;
+
+Procedure TJsonResult.Execute(aURL:string);
+begin
+  _RESTClient.BaseURL:=aURL;
+  _RESTRequest.Execute;
+  _StatusCode:=_RESTResponse.StatusCode;
+  _Content:=_RESTResponse.Content;
+end;
+
 {TWSClient}
+
 constructor TWSClient.Create;
 begin
-  _RESTClient:=tRESTClient.Create('');
-  _RESTRequest:=TRESTRequest.Create(nil);
-  _RESTResponse:=TRESTResponse.Create(nil);
-  _RESTRequest.Client:=_RESTClient;
-  _RESTRequest.Response:= _RESTResponse;
+   _JsonResult:=TJSonResult.Create;
   _idHTTP:=tidHttp.Create(nil);
 end;
 
 Destructor TWSClient.Destroy;
 begin
-  _RESTRequest.Free;;
-  _RESTResponse.Free;;
-  _RESTClient.Free;;
+  _JsonResult.Free;
   _idHTTP.free;
 end;
 
-function TWSClient.getJson(aURL:string):string;
-begin
-  _RESTClient.BaseURL:=aURL;
-  _RESTClient.Accept:='application/json';
-  _RestClient.AcceptCharset:='utf-8, *;q=0.8';
-  _RESTRequest.Execute;
-  result:= _RESTResponse.Content;
-end;
 
 procedure TWSClient.JsonToDataset(URL:string;toDataset:TDataset);
 var JO:TJSONObject;JA:TJSONArray;JP:TJSONPair;
@@ -68,25 +93,31 @@ var JO:TJSONObject;JA:TJSONArray;JP:TJSONPair;
   j: Integer;
   aJSON: string;
 begin
-  _Processing:=true;
-  aJSON:=getJson(url);
-  toDataset.Active:=false;
-  toDataset.Active:=true;
-  JA:=TJSONObject.ParseJSONValue(aJSON) as TJSONArray;
-  for I := 0 to JA.Count-1 do
+  _JsonResult.Execute(url);
+  if (_JsonResult.StatusCode=200)and(_JSonResult.Content <> '') then
   begin
-    JO:=(ja.Items[I] as TJSONObject);
-    toDataset.Append;
-    for j := 0 to jo.Count-1 do
+    aJSON:=_JsonResult.Content;
+    toDataset.Active:=false;
+    toDataset.Active:=true;
+    JA:=TJSONObject.ParseJSONValue(aJSON) as TJSONArray;
+    for I := 0 to JA.Count-1 do
     begin
-      JP:=JO.Pairs[j];
-      toDataset.FieldByName(jp.JsonString.Value).Value:=jp.JsonValue.Value;
+      JO:=(ja.Items[I] as TJSONObject);
+      toDataset.Append;
+      for j := 0 to jo.Count-1 do
+      begin
+        JP:=JO.Pairs[j];
+        toDataset.FieldByName(jp.JsonString.Value).Value:=jp.JsonValue.Value;
+      end;
+      toDataset.Post;
     end;
-    toDataset.Post;
+    toDataset.Open;
+    ja.Free;
+  end else
+  begin
+    raise exception.Create('Dados não encontrados em '+url);
   end;
-  toDataset.Open;
-  ja.Free;
-  _Processing:=false;
+
 end;
 
 function TWSClient.GetImageByUrl(URL: string):TPicture;
@@ -96,8 +127,6 @@ var
 begin
   Picture:=tpicture.Create;
   result:= Picture;
-  if _processing then
-    exit;
   Strm := TMemoryStream.Create;
   try
     _idHTTP.Get(URL, Strm);

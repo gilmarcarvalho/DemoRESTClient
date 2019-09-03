@@ -64,6 +64,7 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
+    Processing:boolean;
     baseURL:string;
     WSClient:TWSClient;
 
@@ -82,21 +83,28 @@ implementation
 
 procedure TfMain.Button1Click(Sender: TObject);
 begin
-  wsclient.JsonToDataset(baseURL+'/posts',fdmemtable1);
+  Processing:=true;
+  wsclient.JsonToDataset(baseURL+'/posts/?userId=10',fdmemtable1);
+  Processing:=false;
+
 end;
 
 procedure TfMain.Button2Click(Sender: TObject);
 begin
+  processing:=true;
   wsclient.JsonToDataset(baseURL+'/photos/?albumId=10',fdmemtable3);
+  processing:=false;
 end;
 
 procedure TfMain.FDMemTable1AfterScroll(DataSet: TDataSet);
 begin
-  wsclient.JsonToDataset(baseURL+'/comments/?postId='+dataset.FieldByName('id').AsString,FDMemTable2);
+  if not processing then
+    wsclient.JsonToDataset(baseURL+'/comments/?postId='+dataset.FieldByName('id').AsString,FDMemTable2);
 end;
 procedure TfMain.FDMemTable3AfterScroll(DataSet: TDataSet);
 var img:tpicture;
 begin
+  if processing then exit;
   img:=wsclient.GetImageByUrl(fdmemtable3.FieldByName('thumbnailUrl').AsString);
   image1.Picture.Assign(img);
   img.Free;
